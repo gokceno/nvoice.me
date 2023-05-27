@@ -76,9 +76,6 @@ app.use(express.json());
     { itemName: 'Product 1', unitPrice: 10 },
     { itemName: 'Product 2', unitPrice: 20 },
   ]);
-  dd.setItems([
-    { itemName: 'Product 3', unitPrice: 30 },
-  ]);
   dd.setNotes('Deneme 123');
 
   var pdfDoc = printer.createPdfKitDocument(dd.get());
