@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const Document = () => {
   let _logoFile;
+  let _isPaid;
   let _currency = 'USD';
   let _invoiceNumber = {};
   let _dateIssued = {};
@@ -9,7 +10,6 @@ const Document = () => {
   let _recipient = {};
   let _notes = [];
   let _items = [];
-  let _isPaid;
   const _setSectionTitle = (text) => {
     return {
       text,
@@ -21,7 +21,7 @@ const Document = () => {
     }
   }
   const _getItemsBody = () => {
-    let _body = [
+    const header = [
       [
         {
           text: 'Item Description',
@@ -38,24 +38,26 @@ const Document = () => {
           margin: [0, 5, 0, 5],
           textTransform: 'uppercase',
         },
-      ],
-      [
+      ]
+    ];
+    const body = _items.map(item => {
+      return [
         {
-          text: 'Item 1',
+          text: item.itemName,
           border: [false, false, false, true],
           margin: [0, 5, 0, 5],
           alignment: 'left',
         },
         {
           border: [false, false, false, true],
-          text: '$999.99',
+          text: `${_currency} ${item.unitPrice.toFixed(2)}`,
           fillColor: '#f5f5f5',
           alignment: 'right',
           margin: [0, 5, 0, 5],
-        },
-      ],
-    ];
-    return _body;
+        }
+      ];
+    });
+    return [...header, ...body];
   }
   const get = () => {
     const DocumentDefinition = {
@@ -195,55 +197,53 @@ const Document = () => {
           widths: ['*', 'auto'],
           body: [
             [
-            {
-              text: 'Subtotal',
-              border: [false, false, false, true],
-              alignment: 'right',
-              margin: [0, 5, 0, 5],
-            },
-            {
-              border: [false, false, false, true],
-              text: '$999.99',
-              alignment: 'right',
-              fillColor: '#f5f5f5',
-              margin: [0, 5, 0, 5],
-            },
+              {
+                text: 'Subtotal',
+                border: [false, false, false, true],
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
+              {
+                border: [false, false, false, true],
+                text: '$999.99',
+                alignment: 'right',
+                fillColor: '#f5f5f5',
+                margin: [0, 5, 0, 5],
+              },
             ],
             [
-            {
-              text: 'Discount',
-              border: [false, false, false, true],
-              alignment: 'right',
-              margin: [0, 5, 0, 5],
-            },
-            {
-              text: 'n/a',
-              border: [false, false, false, true],
-              fillColor: '#f5f5f5',
-              alignment: 'right',
-              margin: [0, 5, 0, 5],
-            },
+              {
+                text: 'Discount',
+                border: [false, false, false, true],
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
+              {
+                text: 'n/a',
+                border: [false, false, false, true],
+                fillColor: '#f5f5f5',
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
             ],
             [
-            {
-              text: 'Amount Due',
-              bold: true,
-
-              alignment: 'right',
-              border: [false, false, false, true],
-              margin: [0, 5, 0, 5],
-            },
-            {
-              text: 'USD 999.99',
-              bold: true,
-
-              alignment: 'right',
-              border: [false, false, false, true],
-              fillColor: '#f5f5f5',
-              margin: [0, 5, 0, 5],
-            },
+              {
+                text: 'Amount Due',
+                bold: true,
+                alignment: 'right',
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+              },
+              {
+                text: 'USD 999.99',
+                bold: true,
+                alignment: 'right',
+                border: [false, false, false, true],
+                fillColor: '#f5f5f5',
+                margin: [0, 5, 0, 5],
+              },
             ],
-            ],
+          ],
         },
       },
       ..._notes
@@ -378,7 +378,7 @@ const Document = () => {
     }
   }
   const setItems = (items) => {
-    if(items !== undefined && typeof items == 'array') {
+    if(items !== undefined && typeof items == 'object') {
       _items = [..._items, ...items];
     }
   }
@@ -405,7 +405,8 @@ const Document = () => {
     setRecipient,
     setItems,
     setNotes,
-    setCurrency
+    setCurrency,
+    setItems
   };
 }
 
