@@ -205,7 +205,7 @@ const Document = () => {
               },
               {
                 border: [false, false, false, true],
-                text: '$999.99',
+                text: _currency + ' ' + _items.reduce((total, item) => +total + (+item.unitPrice), 0).toFixed(2),
                 alignment: 'right',
                 fillColor: '#f5f5f5',
                 margin: [0, 5, 0, 5],
@@ -235,7 +235,7 @@ const Document = () => {
                 margin: [0, 5, 0, 5],
               },
               {
-                text: 'USD 999.99',
+                text: _currency + ' ' + _items.reduce((total, item) => +total + (+item.unitPrice), 0).toFixed(2),
                 bold: true,
                 alignment: 'right',
                 border: [false, false, false, true],
