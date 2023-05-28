@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const pdfMake = require('pdfmake');
 const fs = require('fs');
 const dotenv = require('dotenv');
+const YAML = require('yaml');
 const { DocumentDefinition: DefaultDocumentDefinition, Document: DefaultDocument } = require('./src/Documents/Default.js');
 
 dotenv.config();
@@ -35,7 +36,6 @@ app.use(express.json());
   logger.info('Happy Path hooks are running 👊');
   */
 
-
   // Define font files
   const fonts = {
     Roboto: {
@@ -45,43 +45,47 @@ app.use(express.json());
       bolditalics: './fonts/Roboto/Roboto-MediumItalic.ttf'
     }
   };
-
-  
+  const metadata = YAML.parse(
+    fs.readFileSync('./doc.yaml', 'utf8')
+  );
   const printer = new pdfMake(fonts);
-
+  
   const dd = DefaultDocument();
 
-  dd.setLogo({ logoFilePath: './public/logo.png' });
-  dd.setCurrency('TRL');
-  dd.setInvoiceInfo({ invoiceNumber: '12345', dateIssued: '01/01/2023', isPaid: false });
+  const { invoice_number: invoiceNumber, date_issued: dateIssued, is_paid: isPaid, currency } = metadata.info;
+  const { company_name: senderCompanyName, company_legal_name: senderCompanyLegalName, address: senderAddress, city: senderCity, state: senderState, zip: senderZip, country: senderCountry } = metadata.sender;
+  const { company_name: recipientCompanyName, company_legal_name: recipientCompanyLegalName, address: recipientAddress, city: recipientCity, state: recipientState, zip: recipientZip, country: recipientCountry } = metadata.recipient;
+
+  dd.setLogo({ logoFilePath: metadata.logo });
+  dd.setInvoiceInfo({ invoiceNumber, dateIssued, isPaid, currency });
   dd.setSender({ 
-    companyName: 'Brew Interactive', 
-    companyLegalName: 'Brev Bilişim A.Ş.',
-    address: 'Süleyman Seba Cad. No: 79/1',
-    city: 'Beşiktaş',
-    state: 'İstanbul',
-    zip: '34000',
-    country: 'Turkey'
+    companyName: senderCompanyName, 
+    companyLegalName: senderCompanyLegalName,
+    address: senderAddress,
+    city: senderCity,
+    state: senderState,
+    zip: senderZip,
+    country: senderCountry
   });
   dd.setRecipient({ 
-    companyName: 'Brew Interactive', 
-    companyLegalName: 'Brev Bilişim A.Ş.',
-    address: 'Süleyman Seba Cad. No: 79/1',
-    city: 'Beşiktaş',
-    state: 'İstanbul',
-    zip: '34000',
-    country: 'Turkey'
+    companyName: recipientCompanyName, 
+    companyLegalName: recipientCompanyLegalName,
+    address: recipientAddress,
+    city: recipientCity,
+    state: recipientState,
+    zip: recipientZip,
+    country: recipientCountry
   });
-  dd.setItems([
-    { itemName: 'Product 1', unitPrice: 10 },
-    { itemName: 'Product 2', unitPrice: 20 },
-  ]);
-  dd.setNotes('Deneme 123');
+  dd.setItems(metadata.items.map(item =>  {
+    return {
+      itemName: item.item, 
+      unitPrice: item.unit_price
+    }
+  }));
+  dd.setNotes(metadata.notes);
 
-  var pdfDoc = printer.createPdfKitDocument(dd.get());
+  const pdfDoc = printer.createPdfKitDocument(dd.get());
   pdfDoc.pipe(fs.createWriteStream('./doc.pdf'));
   pdfDoc.end();
-
-
 
 })();
