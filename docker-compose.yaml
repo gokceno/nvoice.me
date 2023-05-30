@@ -1,23 +1,23 @@
 version: '3'
 services:
   api:
-    container_name: api
+    container_name: nvoice-api
     build:
       context: ./apps/api/
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 4000:4000
     env_file:
        - ./apps/api/.env
     networks:
       - nvoice_me
   web:
-    container_name: web
+    container_name: nvoice-web
     build:
       context: ./apps/web/
       dockerfile: Dockerfile
     ports:
-      - 4000:4000
+      - 3000:80
     networks:
       - nvoice_me
     env_file:
