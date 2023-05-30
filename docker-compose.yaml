@@ -11,7 +11,6 @@ services:
        - ./apps/api/.env
     networks:
       - nvoice_me
-    command: ["yarn", "start"]
   web:
     container_name: web
     build:
