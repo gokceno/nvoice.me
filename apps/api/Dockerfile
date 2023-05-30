@@ -7,7 +7,7 @@ WORKDIR /usr/app
 # Copy in the app and weights
 COPY ./ /usr/app
 
-RUN yarn install
+RUN npm install
 
 EXPOSE 4000
 
