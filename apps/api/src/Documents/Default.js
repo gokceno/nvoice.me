@@ -10,7 +10,7 @@ const Document = () => {
   let _recipient = {};
   let _notes = [];
   let _items = [];
-  const _setSectionTitle = (text) => {
+  const _getSectionTitle = (text) => {
     return {
       text,
       color: '#aaaaab',
@@ -19,6 +19,23 @@ const Document = () => {
       alignment: 'left',
       margin: [0, 20, 0, 5],
     }
+  }
+  const _getTotalLine = (title, price) => {
+    return [
+      {
+        text: title,
+        border: [false, false, false, true],
+        alignment: 'right',
+        margin: [0, 5, 0, 5],
+      },
+      {
+        border: [false, false, false, true],
+        text: price,
+        alignment: 'right',
+        fillColor: '#f5f5f5',
+        margin: [0, 5, 0, 5],
+      },
+    ];
   }
   const _getItemsBody = () => {
     const header = [
@@ -59,39 +76,45 @@ const Document = () => {
     });
     return [...header, ...body];
   }
+  const _getTitle = (text) => {
+   return {
+      text,
+      color: '#333333',
+      width: '*',
+      fontSize: 20,
+      bold: true,
+      alignment: 'right',
+      margin: [0, 0, 0, 15],
+    }
+  }
+  const _getLogo = () => {
+    return {
+      image: 'data:image/png;base64,' + _logoFile,
+      width: 75,
+    }
+  }
   const get = () => {
     const DocumentDefinition = {
       content: [
       {
         columns: [
-        {
-          image: 'data:image/png;base64,' + _logoFile,
-          width: 75,
-        },
-        [
-        {
-          text: 'Invoice',
-          color: '#333333',
-          width: '*',
-          fontSize: 20,
-          bold: true,
-          alignment: 'right',
-          margin: [0, 0, 0, 15],
-        },
-        {
-          stack: [
-            _invoiceNumber,
-            _dateIssued,
-            _isPaid
+          _getLogo(),
+          [
+            _getTitle('Invoice'),
+            {
+              stack: [
+                _invoiceNumber,
+                _dateIssued,
+                _isPaid
+              ],
+            },
           ],
-        },
-        ],
         ],
       },
       {
         columns: [
-        _setSectionTitle('INVOICE FROM'),
-        _setSectionTitle('INVOICE FOR'),
+        _getSectionTitle('INVOICE FROM'),
+        _getSectionTitle('INVOICE FOR'),
         ],
       },
       {
@@ -102,8 +125,8 @@ const Document = () => {
       },
       {
         columns: [
-          _setSectionTitle('ADDRESS'),
-          _setSectionTitle('ADDRESS')
+          _getSectionTitle('ADDRESS'),
+          _getSectionTitle('ADDRESS')
         ],
       },
       {
@@ -196,53 +219,9 @@ const Document = () => {
           headerRows: 1,
           widths: ['*', 'auto'],
           body: [
-            [
-              {
-                text: 'Subtotal',
-                border: [false, false, false, true],
-                alignment: 'right',
-                margin: [0, 5, 0, 5],
-              },
-              {
-                border: [false, false, false, true],
-                text: _currency + ' ' + _items.reduce((total, item) => +total + (+item.unitPrice), 0).toFixed(2),
-                alignment: 'right',
-                fillColor: '#f5f5f5',
-                margin: [0, 5, 0, 5],
-              },
-            ],
-            [
-              {
-                text: 'Discount',
-                border: [false, false, false, true],
-                alignment: 'right',
-                margin: [0, 5, 0, 5],
-              },
-              {
-                text: 'n/a',
-                border: [false, false, false, true],
-                fillColor: '#f5f5f5',
-                alignment: 'right',
-                margin: [0, 5, 0, 5],
-              },
-            ],
-            [
-              {
-                text: 'Amount Due',
-                bold: true,
-                alignment: 'right',
-                border: [false, false, false, true],
-                margin: [0, 5, 0, 5],
-              },
-              {
-                text: _currency + ' ' + _items.reduce((total, item) => +total + (+item.unitPrice), 0).toFixed(2),
-                bold: true,
-                alignment: 'right',
-                border: [false, false, false, true],
-                fillColor: '#f5f5f5',
-                margin: [0, 5, 0, 5],
-              },
-            ],
+            _getTotalLine('Subtotal', _currency + ' ' + _items.reduce((total, item) => +total + (+item.unitPrice), 0).toFixed(2)),
+            _getTotalLine('Discount', 'n/a'),
+            _getTotalLine('Amount Due', _currency + ' ' + _items.reduce((total, item) => +total + (+item.unitPrice), 0).toFixed(2)),
           ],
         },
       },
@@ -273,11 +252,11 @@ const Document = () => {
       throw new Error('Required params missing.');
     }
   }
-  const setCurrency = (currencyShortName) => {
-    _currency = currencyShortName;
-  }
   const setInvoiceInfo = (params) => {
-    const { invoiceNumber, dateIssued, isPaid } = params;
+    const { invoiceNumber, dateIssued, isPaid, currency } = params;
+    if(currency !== undefined) {
+      _currency = currency;
+    }
     if(invoiceNumber !== undefined) {
       _invoiceNumber = {
         columns: [
@@ -405,7 +384,6 @@ const Document = () => {
     setRecipient,
     setItems,
     setNotes,
-    setCurrency,
     setItems
   };
 }
