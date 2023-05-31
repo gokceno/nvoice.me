@@ -30,7 +30,7 @@ function Layout() {
       address: Süleyman Seba Cad.
       city: Beşiktaş
       state: Istanbul
-      zip: 34000
+      zip: 34357
       country: Turkey
     recipient:
       company_name: Brew Interactive
