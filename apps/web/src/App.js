@@ -65,8 +65,13 @@ function Layout() {
   }, [debouncedCode]);
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="bg-gray-800 text-white py-4 pl-4">
-        nvoice.me invoice generator
+      <header className="bg-gray-800 text-white py-4 flex justify-between px-4">
+        <div><h1>nvoice.me YAML-to-PDF invoice generator</h1></div>
+        <div>
+          <a href="https://github.com/gokceno/nvoice.me" className="text-white hover:text-gray-400 mx-2">
+            View on GitHub
+          </a>
+        </div>
       </header>
       <div className="flex flex-grow">
         <div className="flex-1">
