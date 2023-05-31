@@ -55,7 +55,7 @@ function Layout() {
   const debouncedCode = useDebounce(code, 800);
   const [pdfInvoiceData, setPdfInvoiceData] = React.useState('');
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_BASEURL}/generate-pdf`, {
+    fetch(process.env.REACT_APP_API_BASEURL + '/generate-pdf', {
       method: 'POST',
       body: code
     })
