@@ -78,6 +78,7 @@ function Layout() {
         <CodeEditor
           value={code}
           language="yaml"
+          data-color-mode="dark"
           placeholder="Please enter YAML code."
           onChange={(e) => setCode(e.target.value)}
           padding={15}
