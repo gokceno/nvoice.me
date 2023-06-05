@@ -78,7 +78,7 @@ function Layout() {
         <CodeEditor
           value={code}
           language="yaml"
-          placeholder="Please enter JS code."
+          placeholder="Please enter YAML code."
           onChange={(e) => setCode(e.target.value)}
           padding={15}
           style={{
