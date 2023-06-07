@@ -18,7 +18,7 @@ function Layout() {
   }
   const [code, setCode] = React.useState(
     `
-    logo: './public/logo.png'
+    logo: 'https://brew-assets.fra1.digitaloceanspaces.com/invoice-logo.png'
     info:
       invoice_number: '0000'
       date_issued: 2023-12-12

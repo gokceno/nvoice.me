@@ -243,10 +243,32 @@ const Document = () => {
     }; 
     return DocumentDefinition;
   }
-  const setLogo = (params) => {
+  const setLogo = async (params) => {
     const { logoFilePath } = params;
     if(logoFilePath !== undefined) {
-      _logoFile = fs.readFileSync(logoFilePath, 'base64');
+      if(logoFilePath.indexOf('http://') == 0 || logoFilePath.indexOf('https://') == 0) {      
+        await fetch(logoFilePath)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error ${response.status}`);
+            }
+            return response.arrayBuffer();
+          })
+          .then((arrayBuffer) => {
+            const byteArray = new Uint8Array(arrayBuffer);
+            let binaryString = '';
+            for (let i = 0; i < byteArray.byteLength; i++) {
+              binaryString += String.fromCharCode(byteArray[i]);
+            }
+            _logoFile = btoa(binaryString);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      else {
+        _logoFile = fs.readFileSync(logoFilePath, 'base64');
+      }
     }
     else {
       throw new Error('Required params missing.');
@@ -254,12 +276,7 @@ const Document = () => {
   }
   const setInvoiceInfo = (params) => {
     const { invoiceNumber, dateIssued, isPaid, currency } = params;
-    if(currency !== undefined) {
-      _currency = currency;
-    }
-    else {
-      _currency = 'USD'
-    }
+    _currency = (currency != undefined || currency != null) ? currency : 'USD'
     if(invoiceNumber !== undefined) {
       _invoiceNumber = {
         columns: [
@@ -391,4 +408,4 @@ const Document = () => {
   };
 }
 
-module.exports = { Document }
+module.exports = { Document } 

@@ -15,8 +15,9 @@ const generatePdf = async (req, res, next) => {
       const { invoice_number: invoiceNumber, date_issued: dateIssued, is_paid: isPaid, currency } = metadata.info;
       const { company_name: senderCompanyName, company_legal_name: senderCompanyLegalName, address: senderAddress, city: senderCity, state: senderState, zip: senderZip, country: senderCountry } = metadata.sender;
       const { company_name: recipientCompanyName, company_legal_name: recipientCompanyLegalName, address: recipientAddress, city: recipientCity, state: recipientState, zip: recipientZip, country: recipientCountry } = metadata.recipient;
+
+      await dd.setLogo({ logoFilePath: metadata.logo });
       
-      dd.setLogo({ logoFilePath: metadata.logo });
       dd.setInvoiceInfo({ invoiceNumber, dateIssued, isPaid, currency });
       dd.setSender({ 
         companyName: senderCompanyName, 
@@ -43,7 +44,7 @@ const generatePdf = async (req, res, next) => {
         }
       }));
       dd.setNotes(metadata.notes);
-
+      
       // Define font files
       const fonts = {
         Roboto: {
