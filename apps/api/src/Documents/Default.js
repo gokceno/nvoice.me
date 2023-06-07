@@ -246,7 +246,7 @@ const Document = () => {
   const setLogo = async (params) => {
     const { logoFilePath } = params;
     if(logoFilePath !== undefined) {
-      if(logoFilePath.indexOf('http://') == 0 || logoFilePath.indexOf('https://') == 0) {      
+      if(logoFilePath.indexOf('http://') == 0 || logoFilePath.indexOf('https://') == 0) {
         await fetch(logoFilePath)
           .then((response) => {
             if (!response.ok) {
