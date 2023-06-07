@@ -257,6 +257,9 @@ const Document = () => {
     if(currency !== undefined) {
       _currency = currency;
     }
+    else {
+      _currency = 'USD'
+    }
     if(invoiceNumber !== undefined) {
       _invoiceNumber = {
         columns: [
@@ -313,11 +316,11 @@ const Document = () => {
             width: '*',
           },
           {
-            text: isPaid ? 'Paid' : 'Not Paid',
+            text: isPaid == true ? 'Paid' : 'Not Paid',
             bold: true,
             fontSize: 12,
             alignment: 'right',
-            color: isPaid ? 'green' : 'red',
+            color: isPaid == true ? 'green' : 'red',
             width: 80,
           },
         ],
@@ -328,14 +331,14 @@ const Document = () => {
     const { companyName, companyLegalName, address, city, state, zip, country } = params;
     if(companyName !== undefined || companyLegalName !== undefined) {
       _sender.senderName = {
-        text: `${companyName} \n ${companyLegalName}`,
+        text: [companyName, companyLegalName].filter(item => item != undefined || item != null).join('\n'),
         color: '#333333',
         alignment: 'left',
       }
     }
-    if(address != undefined && city !== undefined && country !== undefined) {
+    if(address != undefined && country !== undefined) {
       _sender.senderAddress = {
-        text: `${address} \n ${city} ${state} ${zip} \n ${country}`,
+        text: `${address} \n ${ [city, state, zip].filter(item => item != undefined || item != null).join(' ') } \n ${country}`,
         style: 'invoiceBillingAddress',
       };
     }
@@ -344,14 +347,14 @@ const Document = () => {
     const { companyName, companyLegalName, address, city, state, zip, country } = params;
     if(companyName !== undefined || companyLegalName !== undefined) {
       _recipient.recipientName = {
-        text: `${companyName} \n ${companyLegalName}`,
+        text: [companyName, companyLegalName].filter(item => item != undefined || item != null).join('\n'),
         color: '#333333',
         alignment: 'left',
       }
     }
-    if(address != undefined && city !== undefined && country !== undefined) {
+    if(address != undefined && country !== undefined) {
       _recipient.recipientAddress = {
-        text: `${address} \n ${city} ${state} ${zip} \n ${country}`,
+        text: `${address} \n ${ [city, state, zip].filter(item => item != undefined || item != null).join(' ') } \n ${country}`,
         style: 'invoiceBillingAddress',
       };
     }
