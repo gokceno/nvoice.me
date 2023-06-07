@@ -267,7 +267,7 @@ const Document = () => {
           });
       }
       else {
-        _logoFile = fs.readFileSync(logoFilePath, 'base64');
+        _logoFile = fs.readFileSync(logoFilePath, 'base64'); 
       }
     }
     else {
