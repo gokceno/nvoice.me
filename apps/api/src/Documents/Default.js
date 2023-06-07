@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const Document = () => {
   let _logoFile;
+  let _senderCompanyName;
   let _isPaid;
   let _currency = 'USD';
   let _invoiceNumber = {};
@@ -88,9 +89,21 @@ const Document = () => {
     }
   }
   const _getLogo = () => {
-    return {
-      image: 'data:image/png;base64,' + _logoFile,
-      width: 75,
+    if(_logoFile != undefined) {
+      return {
+        image: 'data:image/png;base64,' + _logoFile,
+        width: 75,
+      }
+    }
+    else {
+      if(_senderCompanyName != undefined) {
+       return {
+          text: _senderCompanyName,
+          color: '#333333',
+          fontSize: 24,
+          bold: true,
+        }
+      }
     }
   }
   const get = () => {
@@ -245,7 +258,7 @@ const Document = () => {
   }
   const setLogo = async (params) => {
     const { logoFilePath } = params;
-    if(logoFilePath !== undefined) {
+    if(logoFilePath != undefined && logoFilePath != null) {
       if(logoFilePath.indexOf('http://') == 0 || logoFilePath.indexOf('https://') == 0) {
         await fetch(logoFilePath)
           .then((response) => {
@@ -269,9 +282,6 @@ const Document = () => {
       else {
         _logoFile = fs.readFileSync(logoFilePath, 'base64'); 
       }
-    }
-    else {
-      throw new Error('Required params missing.');
     }
   }
   const setInvoiceInfo = (params) => {
@@ -346,6 +356,9 @@ const Document = () => {
   }
   const setSender = (params) => {
     const { companyName, companyLegalName, address, city, state, zip, country } = params;
+    if(companyName !== undefined) {
+      _senderCompanyName = companyName;
+    }
     if(companyName !== undefined || companyLegalName !== undefined) {
       _sender.senderName = {
         text: [companyName, companyLegalName].filter(item => item != undefined || item != null).join('\n'),
