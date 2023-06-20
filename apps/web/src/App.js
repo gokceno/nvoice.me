@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { DateTime } from 'luxon';
 import { SignUp } from './Routes/SignUp.js'
 
 function Layout() {
@@ -21,7 +22,7 @@ function Layout() {
     logo: 'https://brew-assets.fra1.digitaloceanspaces.com/invoice-logo.png'
     info:
       invoice_number: '0000'
-      date_issued: 2023-12-12
+      date_issued: ${DateTime.now().toFormat("yyyy-MM-dd")}
       currency: USD
       is_paid: true
     sender:

@@ -13,7 +13,8 @@
       "react-dom": "18.2.0",
       "react-pdf": "^7.0.1",
       "react-router-dom": "^6.10.0",
-      "react-scripts": "4.0.0"
+      "react-scripts": "4.0.0",
+      "luxon": "^3.3.0"
    },
    "devDependencies": {
       "@babel/runtime": "7.13.8",
