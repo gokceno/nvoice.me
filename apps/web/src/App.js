@@ -24,7 +24,7 @@ function Layout() {
       invoice_number: '0000'
       date_issued: ${DateTime.now().toFormat("yyyy-MM-dd")}
       currency: USD
-      is_paid: true
+      is_paid: false
     sender:
       company_name: Brew Interactive
       company_legal_name: Brev Bilişim A.Ş.
