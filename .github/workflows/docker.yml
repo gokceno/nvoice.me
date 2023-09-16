@@ -41,3 +41,24 @@ jobs:
         tags: ghcr.io/gokceno/nvoiceme-web:latest, ghcr.io/gokceno/nvoiceme-web:${{ steps.package-version-web.outputs.current-version}}
         build-args: |
           REACT_APP_API_BASEURL=https://api.nvoice.me
+  deploy_to_dokku:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to Tailnet
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:env-ci-runner
+      - name: Push API to Dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@nvoice/nvoice-api'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          deploy_docker_image: ghcr.io/gokceno/nvoiceme-api:latest
+      - name: Push Web to Dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@nvoice/nvoice-web'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          deploy_docker_image: ghcr.io/gokceno/nvoiceme-web:latest
