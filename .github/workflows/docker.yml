@@ -27,4 +27,4 @@ jobs:
       with:
         context: apps/api
         push: true
-        tags: nvoiceme-api:latest, nvoiceme-api:${{ steps.package-version.outputs.current-version}}
+        tags: ghcr.io/gokceno/nvoiceme-api:latest, ghcr.io/gokceno/nvoiceme-api:${{ steps.package-version.outputs.current-version}}
