@@ -53,14 +53,6 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:env-ci-runner
       - name: Rebuild API
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ env.DOKKU_TS_HOST }}
-          username: root
-          script: dokku ps:rebuild nvoice-api
+        run: ssh root@${{ env.DOKKU_TS_HOST }} "dokku ps:rebuild nvoice-api"
       - name: Rebuild Web
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ env.DOKKU_TS_HOST }}
-          username: root
-          script: dokku ps:rebuild nvoice-web
+        run: ssh root@${{ env.DOKKU_TS_HOST }} "dokku ps:rebuild nvoice-web"
