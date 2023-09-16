@@ -42,6 +42,7 @@ jobs:
         build-args: |
           REACT_APP_API_BASEURL=https://api.nvoice.me
   deploy_to_dokku:
+    needs: build_and_push_images
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Tailnet
@@ -53,12 +54,12 @@ jobs:
       - name: Push API to Dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@nvoice/nvoice-api'
+          git_remote_url: ssh://dokku@100.64.73.56/nvoice-api
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           deploy_docker_image: ghcr.io/gokceno/nvoiceme-api:latest
       - name: Push Web to Dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@nvoice/nvoice-web'
+          git_remote_url: ssh://dokku@100.64.73.56/nvoice-web
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           deploy_docker_image: ghcr.io/gokceno/nvoiceme-web:latest
