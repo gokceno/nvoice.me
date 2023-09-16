@@ -1,0 +1,30 @@
+name: Docker Image CI
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+env:
+  REGISTRY: ghcr.io
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to the Container registry
+      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GH_TOKEN }}
+    - name: Get NPM version for API
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@v1.3.1
+      with:
+        path: apps/api
+    - name: Build and push Docker image for API
+      uses: docker/build-push-action@v5.0.0
+      with:
+        context: apps/api
+        push: true
+        tags: nvoiceme-api:latest, nvoiceme-api:${{ steps.package-version.outputs.current-version}}
