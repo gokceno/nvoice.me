@@ -54,12 +54,12 @@ jobs:
       - name: Push API to Dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: ssh://dokku@100.64.73.56/nvoice-api
+          git_remote_url: ssh://dokku@100.64.73.56:22/nvoice-api
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           deploy_docker_image: ghcr.io/gokceno/nvoiceme-api:latest
       - name: Push Web to Dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: ssh://dokku@100.64.73.56/nvoice-web
+          git_remote_url: ssh://dokku@100.64.73.56:22/nvoice-web
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           deploy_docker_image: ghcr.io/gokceno/nvoiceme-web:latest
