@@ -1,0 +1,47 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+envs:
+- key: LOGLEVEL
+  scope: RUN_AND_BUILD_TIME
+  value: info
+ingress:
+  rules:
+  - component:
+      name: nvoice-me-web
+    match:
+      path:
+        prefix: /
+  - component:
+      name: nvoice-me-api
+    match:
+      path:
+        prefix: /api
+name: nvoice-me
+region: fra
+services:
+- dockerfile_path: apps/api/Dockerfile
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: gokceno/nvoice.me
+  http_port: 4000
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: nvoice-me-api
+  source_dir: apps/api
+- dockerfile_path: apps/web/Dockerfile
+  envs:
+  - key: REACT_APP_API_BASEURL
+    scope: RUN_AND_BUILD_TIME
+    value: https://nvoice.me/api
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: gokceno/nvoice.me
+  health_check: {}
+  http_port: 80
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: nvoice-me-web
+  source_dir: apps/web
