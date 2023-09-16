@@ -39,3 +39,5 @@ jobs:
         context: apps/web
         push: true
         tags: ghcr.io/gokceno/nvoiceme-web:latest, ghcr.io/gokceno/nvoiceme-web:${{ steps.package-version-web.outputs.current-version}}
+        build-args: |
+          REACT_APP_API_BASEURL=https://api.nvoice.me
