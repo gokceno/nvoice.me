@@ -1,6 +1,8 @@
  # Specify a base image
 FROM node:18 AS build 
 
+LABEL org.opencontainers.image.source = "https://github.com/gokceno/nvoice.me"
+
 # Change working directory
 WORKDIR /usr/app
 
