@@ -17,7 +17,7 @@ services:
       context: ./apps/web/
       dockerfile: Dockerfile
       args:
-        REACT_APP_API_BASEURL: https://nvoice.me/api
+        REACT_APP_API_BASEURL: https://api.nvoice.me
     ports:
       - 3000:3000
     networks:
