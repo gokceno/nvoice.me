@@ -6,7 +6,7 @@ services:
       context: ./apps/api/
       dockerfile: Dockerfile
     ports:
-      - 4000:4000
+      - 4000
     env_file:
       - ./apps/api/.env
     networks:
@@ -19,7 +19,7 @@ services:
       args:
         REACT_APP_API_BASEURL: https://api.nvoice.me
     ports:
-      - 3000:3000
+      - 80
     networks:
       - nvoice_me
     env_file:
